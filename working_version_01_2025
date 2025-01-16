@@ -1,0 +1,98 @@
+import winsound
+
+freg = 800
+dur = 900
+
+
+list_otkaz = [
+
+
+
+]
+
+
+list_not_find = []
+total_scans = 0
+print_list_otkaz = int(3)
+sum_from_today =   int(5)
+list_ostalos_naiti = int(4)
+dict_for_check = {
+
+
+
+
+
+
+}
+
+list_zakaz = []
+
+list_zakaz_control = []
+
+for key, value in dict_for_check.items():
+    list_zakaz.append(int(key))
+    list_zakaz_control.append(int(key))
+
+def pic(sh_cod):
+    global total_scans
+    # print(list_not_find)
+
+    if sh_cod == sum_from_today:
+        print(f'Отсканировано "Сегодняшних" заказов: {total_scans}, осталось отсканировать {len(list_zakaz)}')
+
+    elif sh_cod in list_not_find:           #  if int(sh_cod[1:]) in list_not_find:
+        print('Этот заказ уже БЫЛ Отсканирован сегодня')
+        winsound.Beep(freg, dur + 100)
+
+    elif sh_cod in list_otkaz:                        # if int(sh_cod[1:]) in list_otkaz:
+        print('OTKAZ')
+        list_otkaz.remove(sh_cod)
+        # print(list_zakaz, 'list_zakaz - 2')
+        winsound.Beep(freg, dur + 500)
+
+
+    elif sh_cod not in list_zakaz:                      #  if int(sh_cod[1:]) not in list_zakaz:
+        print(sh_cod, ' - Этого номера НЕТ в сегодняшних заказах')
+
+        list_not_find.append(sh_cod)                  # list_not_find.append(int(sh_cod[1:]))
+        # print(list_not_find, 3)
+        winsound.Beep(freg, dur + 200)
+
+    if sh_cod not in list_zakaz and sh_cod in list_zakaz_control:
+        print('Этот номер уже БЫЛ Отсканирован сегодня')
+        winsound.Beep(freg, dur + 800)
+
+    if sh_cod == list_ostalos_naiti:
+        for i in list_zakaz:
+            print(dict_for_check[str(i)])
+            # for key, value in dict_for_check.items():
+            #     print(dict_for_check[key])
+
+
+    if sh_cod == print_list_otkaz:
+        print(f'Осталось найти "Отказных" заказов {len(list_otkaz)}, с номерами штрих-кодов: {list_otkaz}')
+
+
+
+    elif sh_cod in list_zakaz:
+
+            list_zakaz.remove(sh_cod)          #   list_zakaz.remove(int(sh_cod[1:]))
+            total_scans += 1
+            winsound.Beep(freg, dur - 710)
+            print(f'{total_scans} Осталось отсканировать {len(list_zakaz)}')
+
+
+
+    else:
+        pass
+
+# print(id(list_zakaz))
+# print(id(list_zakaz_control))
+# print(id(list_ostalos_naiti))
+
+while True:
+    try:
+        pic(int(input()))
+    except:
+        winsound.Beep(freg, dur + 710)
+        print('Отсканируй этот штрих-код ЕЩЕ РАЗ')
