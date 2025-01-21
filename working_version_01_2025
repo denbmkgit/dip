@@ -4,7 +4,7 @@ freg = 800
 dur = 900
 
 
-list_otkaz = [250074816607000, 400585282655000
+list_otkaz = [500471848019001, 500471848019002,          # Примеры того, что вставляется из Excel файла
 ]
 
 
@@ -13,10 +13,12 @@ total_scans = 0
 print_list_otkaz = int(3)
 sum_from_today =   int(5)
 list_ostalos_naiti = int(4)
-dict_for_check = {
-    "800586752593000": ("ФК000067142, 86030681-0163-2"),
-    "250074816607000": ("ФК000067143, 0129971119-0148-1"),
-    "600587529589000": ("ФК000067144, 02885360-0039-3"),
+dict_for_check = {"400469484525000": ("ФК000047423, 75973099-0305-1"),
+"200693602401000": ("ФК000048014, 74317161-0141-1"),
+"900472120297000": ("ФК000048018, 25856715-0176-1"),             # Примеры того, что вставляется из Excel файла
+"200693943005000": ("ФК000048158, 0150855153-0051-1"),
+"500471848019000": ("ФК000048162, 66748256-0055-2"),
+
 }
 
 list_zakaz = []
@@ -34,23 +36,15 @@ def pic(sh_cod):
     if sh_cod == sum_from_today:
         print(f'Отсканировано "Сегодняшних" заказов: {total_scans}, осталось отсканировать {len(list_zakaz)}')
 
-    elif sh_cod in list_not_find:           #  if int(sh_cod[1:]) in list_not_find:
+    if sh_cod in list_not_find:           #  if int(sh_cod[1:]) in list_not_find:
         print('Этот заказ уже БЫЛ Отсканирован сегодня')
         winsound.Beep(freg, dur + 100)
 
-    elif sh_cod in list_otkaz:                        # if int(sh_cod[1:]) in list_otkaz:
+    if sh_cod in list_otkaz:                        # if int(sh_cod[1:]) in list_otkaz:
         print('OTKAZ')
         list_otkaz.remove(sh_cod)
         # print(list_zakaz, 'list_zakaz - 2')
         winsound.Beep(freg, dur + 500)
-
-
-    elif sh_cod not in list_zakaz:                      #  if int(sh_cod[1:]) not in list_zakaz:
-        print(sh_cod, ' - Этого номера НЕТ в сегодняшних заказах')
-
-        list_not_find.append(sh_cod)                  # list_not_find.append(int(sh_cod[1:]))
-        # print(list_not_find, 3)
-        winsound.Beep(freg, dur + 200)
 
     if sh_cod not in list_zakaz and sh_cod in list_zakaz_control:
         print('Этот номер уже БЫЛ Отсканирован сегодня')
@@ -59,14 +53,10 @@ def pic(sh_cod):
     if sh_cod == list_ostalos_naiti:
         for i in list_zakaz:
             print(dict_for_check[str(i)])
-            # for key, value in dict_for_check.items():
-            #     print(dict_for_check[key])
 
 
     if sh_cod == print_list_otkaz:
         print(f'Осталось найти "Отказных" заказов {len(list_otkaz)}, с номерами штрих-кодов: {list_otkaz}')
-
-
 
     elif sh_cod in list_zakaz:
 
@@ -74,15 +64,17 @@ def pic(sh_cod):
             total_scans += 1
             winsound.Beep(freg, dur - 710)
             print(f'{total_scans} Осталось отсканировать {len(list_zakaz)}')
+            
+    elif sh_cod not in list_zakaz:                      #  if int(sh_cod[1:]) not in list_zakaz:
+        print(sh_cod, ' - Этого номера НЕТ в сегодняшних заказах')
 
-
-
+        list_not_find.append(sh_cod)                  # list_not_find.append(int(sh_cod[1:]))
+        winsound.Beep(freg, dur + 200)
+        
+        
     else:
         pass
 
-# print(id(list_zakaz))
-# print(id(list_zakaz_control))
-# print(id(list_ostalos_naiti))
 
 while True:
     try:
